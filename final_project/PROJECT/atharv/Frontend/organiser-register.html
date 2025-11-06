@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizer Registration - SocioServe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #222;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0a1a2f;
+    }
+
+    .navbar nav a {
+      text-decoration: none;
+      color: #444;
+      font-size: 15px;
+      transition: 0.3s;
+      margin-left: 20px;
+    }
+
+    .navbar nav a:hover {
+      color: #0a1a2f;
+    }
+
+    .form-container {
+      flex: 1;
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0a1a2f;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .register-form label {
+      display: block;
+      margin: 20px 0 8px 0;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .register-form input,
+    .register-form textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+
+    .register-form input:focus,
+    .register-form textarea:focus {
+      border-color: #0a1a2f;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.1);
+      outline: none;
+    }
+
+    .register-form textarea {
+      resize: vertical;
+      min-height: 100px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .primary {
+      background: #0a1a2f;
+      color: #fff;
+    }
+
+    .primary:hover {
+      background: #142b4f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(10, 26, 47, 0.3);
+    }
+
+    .alert {
+      padding: 16px 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      font-weight: 500;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .form-footer a {
+      color: #0a1a2f;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .form-footer a:hover {
+      color: #142b4f;
+      text-decoration: underline;
+    }
+
+    .password-strength {
+      margin-top: 5px;
+    }
+
+    .strength-bar {
+      height: 4px;
+      background: #e9ecef;
+      border-radius: 2px;
+      margin-bottom: 5px;
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease, background 0.3s ease;
+      width: 0%;
+    }
+
+    .strength-weak { background: #dc3545; width: 33%; }
+    .strength-medium { background: #ffc107; width: 66%; }
+    .strength-strong { background: #28a745; width: 100%; }
+
+    .requirements {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .requirement {
+      margin: 2px 0;
+      transition: color 0.3s ease;
+    }
+
+    .requirement.met {
+      color: #28a745;
+    }
+
+    .requirement.unmet {
+      color: #dc3545;
+    }
+
+    .password-match {
+      font-size: 12px;
+      margin-top: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .match { color: #28a745; }
+    .mismatch { color: #dc3545; }
+
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+
+      .form-container {
+        margin: 20px;
+        padding: 30px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">SocioServe</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="volunteer-register.html">Volunteer Register</a>
+    </nav>
+  </header>
+
+  <section class="form-container">
+    <h2>Register as Organizer</h2>
+    
+    <div id="message" class="alert" style="display: none;"></div>
+    
+    <form id="organizerRegisterForm" class="register-form">
+      <label for="orgName">Organization Name *</label>
+      <input type="text" id="orgName" name="orgName" required placeholder="Enter your organization name">
+
+      <label for="contactPerson">Contact Person *</label>
+      <input type="text" id="contactPerson" name="contactPerson" required placeholder="Full name of contact person">
+
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" name="email" required placeholder="Enter organization email">
+
+      <label for="phone">Phone Number *</label>
+      <input type="tel" id="phone" name="phone" required placeholder="Enter contact number">
+
+      <label for="password">Password *</label>
+      <input type="password" id="password" name="password" required placeholder="Create a secure password">
+      
+      <div class="password-strength">
+        <div class="strength-bar">
+          <div id="strengthFill" class="strength-fill"></div>
+        </div>
+        <div class="requirements">
+          <div id="lengthReq" class="requirement unmet">✓ At least 8 characters</div>
+          <div id="upperReq" class="requirement unmet">✓ One uppercase letter</div>
+          <div id="lowerReq" class="requirement unmet">✓ One lowercase letter</div>
+          <div id="numberReq" class="requirement unmet">✓ One number</div>
+          <div id="specialReq" class="requirement unmet">✓ One special character</div>
+        </div>
+      </div>
+
+      <label for="confirmPassword">Confirm Password *</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+      <div id="passwordMatch" class="password-match"></div>
+
+      <label for="cause">Cause / Initiative *</label>
+      <textarea id="cause" name="cause" required placeholder="Describe your organization's mission and initiatives..."></textarea>
+
+      <button type="submit" id="submitBtn" class="btn primary">
+        Register Organization
+      </button>
+    </form>
+    
+    <div class="form-footer">
+      <p>Already have an account? <a href="organiser-login.html">Sign in here</a></p>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 2rem 1rem; background: #f8f9fa; color: #333; margin-top: auto;">
+    <p>&copy; 2025 SocioServe. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Password validation functions
+    function validatePassword(password) {
+      const minLength = 8;
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      
+      const errors = [];
+      
+      if (password.length < minLength) {
+        errors.push('Password must be at least 8 characters long');
+      }
+      if (!hasUpperCase) {
+        errors.push('Password must contain at least one uppercase letter');
+      }
+      if (!hasLowerCase) {
+        errors.push('Password must contain at least one lowercase letter');
+      }
+      if (!hasNumbers) {
+        errors.push('Password must contain at least one number');
+      }
+      if (!hasSpecialChar) {
+        errors.push('Password must contain at least one special character');
+      }
+      
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    }
+
+    function calculatePasswordStrength(password) {
+      let strength = 0;
+      if (password.length >= 8) strength += 20;
+      if (/[A-Z]/.test(password)) strength += 20;
+      if (/[a-z]/.test(password)) strength += 20;
+      if (/\d/.test(password)) strength += 20;
+      if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 20;
+      return strength;
+    }
+
+    function updatePasswordRequirements(password) {
+      document.getElementById('lengthReq').className = password.length >= 8 ? 'requirement met' : 'requirement unmet';
+      document.getElementById('upperReq').className = /[A-Z]/.test(password) ? 'requirement met' : 'requirement unmet';
+      document.getElementById('lowerReq').className = /[a-z]/.test(password) ? 'requirement met' : 'requirement unmet';
+      document.getElementById('numberReq').className = /\d/.test(password) ? 'requirement met' : 'requirement unmet';
+      document.getElementById('specialReq').className = /[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'requirement met' : 'requirement unmet';
+    }
+
+    function updateStrengthBar(strength) {
+      const strengthFill = document.getElementById('strengthFill');
+      strengthFill.className = 'strength-fill';
+      
+      if (strength < 40) {
+        strengthFill.classList.add('strength-weak');
+      } else if (strength < 80) {
+        strengthFill.classList.add('strength-medium');
+      } else {
+        strengthFill.classList.add('strength-strong');
+      }
+    }
+
+    // Real-time password validation
+    document.getElementById('password').addEventListener('input', function(e) {
+      const password = e.target.value;
+      const strength = calculatePasswordStrength(password);
+      
+      updateStrengthBar(strength);
+      updatePasswordRequirements(password);
+    });
+
+    // Confirm password validation
+    document.getElementById('confirmPassword').addEventListener('input', function(e) {
+      const password = document.getElementById('password').value;
+      const confirmPassword = e.target.value;
+      const matchDiv = document.getElementById('passwordMatch');
+      
+      if (confirmPassword === '') {
+        matchDiv.textContent = '';
+        matchDiv.className = 'password-match';
+      } else if (password === confirmPassword) {
+        matchDiv.textContent = '✓ Passwords match';
+        matchDiv.className = 'password-match match';
+      } else {
+        matchDiv.textContent = '✗ Passwords do not match';
+        matchDiv.className = 'password-match mismatch';
+      }
+    });
+
+    // Form submission
+    document.getElementById('organizerRegisterForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const messageDiv = document.getElementById('message');
+      
+      // Clear previous messages
+      messageDiv.style.display = 'none';
+      messageDiv.className = 'alert';
+      
+      // Validate passwords
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        messageDiv.textContent = '❌ Passwords do not match. Please make sure both passwords are the same.';
+        messageDiv.className = 'alert error';
+        messageDiv.style.display = 'block';
+        return;
+      }
+      
+      // Check password strength
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.isValid) {
+        messageDiv.textContent = '❌ Password requirements not met:\n• ' + passwordValidation.errors.join('\n• ');
+        messageDiv.className = 'alert error';
+        messageDiv.style.display = 'block';
+        return;
+      }
+      
+      // Show loading state
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Registering Organization...';
+      submitBtn.classList.add('loading');
+      
+      // Get form data
+      const formData = {
+        organizationName: document.getElementById('orgName').value.trim(),
+        contactPerson: document.getElementById('contactPerson').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        password: password,
+        cause: document.getElementById('cause').value.trim()
+      };
+
+      try {
+        const response = await fetch('http://localhost:8092/api/organizers/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+        
+        if (response.ok && result.id) {
+          // Store organizer data in localStorage
+          localStorage.setItem('organizer', JSON.stringify(result));
+          
+          messageDiv.textContent = '🎉 Organization registered successfully! Redirecting to dashboard...';
+          messageDiv.className = 'alert success';
+          messageDiv.style.display = 'block';
+          
+          // Clear form
+          document.getElementById('organizerRegisterForm').reset();
+          document.getElementById('strengthFill').className = 'strength-fill';
+          updatePasswordRequirements('');
+          document.getElementById('passwordMatch').textContent = '';
+          
+          // Redirect to dashboard after 2 seconds
+          setTimeout(() => {
+            window.location.href = 'organiser-dashboard.html';
+          }, 2000);
+          
+        } else {
+          throw new Error(result || `Registration failed with status: ${response.status}`);
+        }
+        
+      } catch (error) {
+        console.error('Registration error:', error);
+        
+        // Show error message
+        messageDiv.textContent = '❌ Registration failed: ' + error.message;
+        messageDiv.className = 'alert error';
+        messageDiv.style.display = 'block';
+        
+      } finally {
+        // Reset button
+        submitBtn.textContent = originalText;
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    // Test backend connection
+    window.addEventListener('load', async () => {
+      try {
+        const response = await fetch('http://localhost:8092/api/organizers/test');
+        console.log('Backend connection test:', response.status);
+      } catch (error) {
+        console.error('Backend connection failed:', error);
+      }
+    });
+  </script>
+</body>
+</html>

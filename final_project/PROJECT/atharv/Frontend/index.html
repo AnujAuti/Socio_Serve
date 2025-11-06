@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SocioServe</title>
+  <style>
+    /* Reset */
+    html {
+  scroll-behavior: smooth;
+}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+   .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 70px;          /* Increased padding for height and spacing */
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+  .navbar .logo {
+  font-size: 26px;             /* Increased from 20px */
+  font-weight: bold;
+  color: #0a1a2f;
+}
+
+  .nav-links {
+  display: flex;
+  gap: 30px;                   /* More spacing between links */
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #444;
+  font-size: 17px;             /* Increased from 15px */
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+  .nav-links a:hover {
+  color: #0a1a2f;
+  transform: scale(1.05);
+}
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .auth-buttons button {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid #0a1a2f;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .auth-buttons .login {
+      background: #fff;
+      color: #0a1a2f;
+    }
+
+    .auth-buttons .register {
+      background: #0a1a2f;
+      color: #fff;
+    }
+
+    .auth-buttons .register:hover {
+      background: #142b4f;
+    }
+    /* Dropdown styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown .register {
+  background: #0a1a2f;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s  ease, transform 0.2s ease, box-shadow 0.3s ease;;
+}
+
+.dropdown .register:hover {
+    background: #142b4f;         /* darker navy */
+  transform: translateY(-2px); /* lift effect */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* glow/shadow */
+}
+
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: #fff;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1000;
+}
+
+.dropdown-content a {
+  color: #333;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.2s;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #111;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .hero-buttons button {
+      padding: 12px 25px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .sub-buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center; /* keeps them centered */
+  flex-wrap: wrap; /* ensures responsiveness */
+}
+    .explore {
+    background: #0a1a2f;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    }
+    .explore:hover {
+  background: #142b4f;       /* darker navy */
+  transform: scale(1.05);    /* zoom */
+    }
+    .volunteer {
+    background: #d1cdcd;
+    color: #0a1a2f;
+    border: 1px solid #0a1a2f;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    }
+    .volunteer:hover {
+    background: #0a1a2f;   /* fill in */
+    color: #fff;           /* text turns white */
+    transform: translateY(-3px);  /* lift up */
+    }
+
+    /* Events Section */
+    .events {
+      padding: 80px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .events h2 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 40px;
+      color: #111;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: #222;
+    }
+
+    .card p {
+      margin: 5px 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .details {
+      margin: 15px 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .details span {
+      display: block;
+      margin: 5px 0;
+    }
+
+    .btn {
+      width: 100%;
+      background: #0a1a2f;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: #142b4f;
+    }
+
+    /* ================= FOOTER STYLES ================= */
+.footer {
+  background: #f8f9fa;
+  padding: 2rem 1rem;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: auto;
+  gap: 2rem;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-section h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: #000;
+}
+
+.footer-section p {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.footer-section a {
+  color: #0077b6;
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  text-decoration: underline;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.4rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* ================= RESPONSIVE FOOTER ================= */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">SocioServe</div>
+  <ul class="nav-links">
+    <li><a href="#">About</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+
+  <!-- Dropdown Register -->
+  <div class="dropdown">
+    <button class="register">Register ▾</button>
+    <div class="dropdown-content">
+      <a href="./volunteer-register.html">Register as Volunteer</a>
+      <a href="./organiser-register.html">Register as Organiser</a>
+    </div>
+  </div>
+</nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Volunteer for Causes that Matter</h1>
+    <p>
+      Join hands with our NGO to support education, health, and environment initiatives.  
+      Browse upcoming events and make an impact.
+    </p>
+ 
+    <div class="hero-buttons">
+    
+    <div class="sub-buttons">    
+       <a href="./volunteer-register.html"><button class="volunteer"> Become a Volunteer</button></a>
+       <a href="./organiser-register.html"> <button class="volunteer">Become a Organiser</button></a>
+    </div>
+  </div>
+  </section>
+
+  <!-- Events Section -->
+  
+    <!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="footer-container">
+    
+    <!-- About NGO Section -->
+    <div class="footer-section">
+      <h4>About SocioServe</h4>
+      <p>We connect passionate volunteers with meaningful NGO initiatives in the community.</p>
+    </div>
+    
+    <!-- Contact Section -->
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>📧 <a href="mailto:hello@ngoconnect.org">hello@ngoconnect.org</a></p>
+      <p>📞 +1 (555) 123-4567</p>
+      <p>📍 123 Impact Lane, Your City</p>
+    </div>
+    
+    <!-- Quick Links Section -->
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#volunteer">Volunteer</a></li>
+      </ul>
+    </div>  
+
+  </div>
+  
+  <!-- Bottom Note -->
+  <div class="footer-bottom">
+    <p>&copy; 2025 SocioServe. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

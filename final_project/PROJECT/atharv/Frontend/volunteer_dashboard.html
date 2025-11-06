@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volunteer Dashboard - SocioServe</title>
+  <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0a1a2f;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #555;
+    margin-left: 25px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #0a1a2f;
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.welcome-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 25px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.section h2 {
+    color: #0a1a2f;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-controls select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+}
+
+.btn-refresh {
+    background: #667eea;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-refresh:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.event-card {
+    background: white;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.event-card.full {
+    opacity: 0.7;
+    border-left: 4px solid #f44336;
+}
+
+.event-card.available {
+    border-left: 4px solid #4CAF50;
+}
+
+.event-card.registered {
+    border-left: 4px solid #2196F3;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.event-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0a1a2f;
+    flex: 1;
+}
+
+.event-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.event-meta {
+    margin-bottom: 15px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.volunteer-info {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4CAF50;
+    border-radius: 10px;
+    transition: width 0.3s;
+}
+
+.event-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    font-size: 14px;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-view {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-register {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-unregister {
+    background: #f44336;
+    color: white;
+}
+
+.btn-disabled {
+    background: #9e9e9e;
+    color: white;
+    cursor: not-allowed;
+}
+
+.btn:hover:not(.btn-disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Sidebar Styles */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.quick-actions-card, .activity-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.quick-actions-card h3, .activity-card h3 {
+    color: #0a1a2f;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.action-btn {
+    width: 100%;
+    background: #667eea;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+}
+
+.activity-item {
+    padding: 12px;
+    border-left: 3px solid #667eea;
+    background: #f8f9fa;
+    margin-bottom: 10px;
+    border-radius: 0 8px 8px 0;
+}
+
+.activity-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #0a1a2f;
+}
+
+.activity-meta {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .events-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    
+    .dashboard-container {
+        margin: 20px;
+        padding: 0 10px;
+    }
+    
+    .welcome-hero {
+        padding: 25px;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .events-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+    }
+}
+
+
+
+/* Stories Styles */
+.stories-container {
+    display: grid;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.story-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.story-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.volunteer-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.volunteer-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.volunteer-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.story-date {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.story-image {
+    margin: 15px 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.story-image img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.story-title {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.story-text {
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.story-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.like-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background: #ffe6e6;
+}
+
+.like-btn.liked {
+    color: #e74c3c;
+}
+
+/* Share Buttons */
+.share-buttons {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.share-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.share-btn {
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease;
+}
+
+.share-btn:hover {
+    opacity: 0.9;
+}
+
+.share-copy-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Story Modal */
+.story-modal .modal-content {
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Notifications */
+.share-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    z-index: 1000;
+    animation: slideInRight 0.3s ease;
+}
+
+.share-notification.success {
+    background: #28a745;
+}
+
+.share-notification.error {
+    background: #dc3545;
+}
+
+.share-notification.info {
+    background: #17a2b8;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .story-footer {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .share-buttons-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+.story-badge {
+    background: #667eea;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.event-cta {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.event-cta h4 {
+    margin: 0 0 10px 0;
+    color: white;
+}
+
+.event-cta p {
+    margin: 0 0 10px 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.share-btn {
+    background: #667eea !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 15px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    min-width: 120px !important;
+}
+
+.share-btn:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+}
+
+.share-buttons-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) !important;
+    gap: 8px !important;
+    margin: 15px 0 !important;
+}
+
+.shareable-event {
+    transition: all 0.3s ease;
+}
+
+.shareable-event:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+  </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">SocioServe</div>
+        <div class="nav-links">
+            <a href="#" id="volunteerName">Volunteer</a>
+            <a href="index.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="main-section">
+            <!-- Volunteer Welcome Section -->
+            <div class="welcome-hero">
+                <div class="hero-content">
+                    <h1>Welcome back, <span id="heroVolunteerName">Volunteer</span>! 👋</h1>
+                    <p class="tagline">Find meaningful volunteering opportunities and make a difference in your community.</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="registeredEvents">0</div>
+                            <div class="stat-label">Events Registered</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completedEvents">0</div>
+                            <div class="stat-label">Events Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="upcomingEvents">0</div>
+                            <div class="stat-label">Upcoming Events</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Events Section -->
+            <div class="section">
+                <h2>📅 Available Volunteering Events</h2>
+                <div class="filter-controls">
+                    <select id="categoryFilter" onchange="filterEvents()">
+                        <option value="">All Categories</option>
+                        <option value="Environment">Environment</option>
+                        <option value="Education">Education</option>
+                        <option value="Health">Health</option>
+                        <option value="Community">Community</option>
+                        <option value="Animal Welfare">Animal Welfare</option>
+                    </select>
+                    <select id="dateFilter" onchange="filterEvents()">
+                        <option value="">Any Date</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                    <button class="btn-refresh" onclick="loadAllEvents()">🔄 Refresh</button>
+                </div>
+                <div id="availableEvents" class="events-grid">
+                    <!-- Available events will be loaded here -->
+                </div>
+            </div>
+
+            <!-- My Registered Events Section -->
+            <div class="section">
+                <h2>✅ My Registered Events</h2>
+                <div id="registeredEventsList" class="events-grid">
+                    <!-- Registered events will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <!-- Quick Actions -->
+            <div class="quick-actions-card">
+                <h3>Quick Actions</h3>
+                <button class="action-btn" onclick="loadAllEvents()">
+                    🔄 Refresh Events
+                </button>
+                <button class="action-btn" onclick="viewMyEvents()">
+                    👀 View My Events
+                </button>
+                <button class="action-btn" onclick="updateProfile()">
+                    ⚙️ Update Profile
+                </button>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="activity-card">
+                <h3>Recent Activity</h3>
+                <div id="recentActivity">
+                    <!-- Activity will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Event Details</h3>
+            <div id="eventDetails">
+                <!-- Event details will be loaded here -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal()">Close</button>
+                <button class="btn btn-register" id="registerBtn" onclick="registerForEvent()">Register for Event</button>
+                <button class="btn btn-unregister" id="unregisterBtn" onclick="unregisterFromEvent()" style="display: none;">Unregister</button>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="generateVolunteerReport(currentVolunteerId, 'pdf')" class="btn-report">Download My Events PDF</button>
+<button onclick="generateVolunteerReport(currentVolunteerId, 'csv')" class="btn-report">Download My Events CSV</button>
+
+
+<!-- Share Your Registered Events Section -->
+<!-- Share Your Registered Events Section -->
+<div class="section">
+    <h3>🎯 Share & Encourage Participation</h3>
+    <p style="color: #666; margin-bottom: 20px;">Share events you've registered for and inspire others to join you in making a difference!</p>
+    
+    <div id="share-events-container">
+        <!-- Social media buttons will appear here -->
+        <div style="text-align: center; padding: 40px; color: #666;">
+            <p>Loading sharing options...</p>
+        </div>
+    </div>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
+        <h4 style="color: #2c3e50; margin-bottom: 10px;">💡 Sharing Tips:</h4>
+        <ul style="color: #666; margin: 0; padding-left: 20px;">
+            <li>Share why you're excited about the event</li>
+            <li>Mention what impact you hope to make</li>
+            <li>Encourage friends to join you</li>
+            <li>Post about your experience after the event</li>
+        </ul>
+    </div>
+</div>
+
+
+    
+  <script>
+   
+
+const API_BASE = 'http://localhost:8092/api';
+let currentVolunteer = "";
+let currentVolunteerEmail = "";
+let allEvents = [];
+let currentEventId = null;
+
+// Initialize dashboard when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Volunteer Dashboard loaded');
+    loadVolunteerData();
+    // Initialize sharing after volunteer data is loaded
+    setTimeout(() => {
+        const volunteer = JSON.parse(localStorage.getItem('volunteer'));
+        if (volunteer) {
+            // Load events for sharing
+            loadEventsForSharing();
+            
+            // Initialize stories system
+            if (volunteer.id) {
+                volunteerStories.init(volunteer.id);
+            }
+        }
+    }, 1500);
+});
+
+// Load volunteer data from localStorage
+function loadVolunteerData() {
+    const volunteerDataString = localStorage.getItem('volunteer');
+    console.log('Volunteer data from localStorage:', volunteerDataString);
+    
+    if (volunteerDataString) {
+        try {
+            const volunteer = JSON.parse(volunteerDataString);
+            console.log('Parsed volunteer data:', volunteer);
+            
+            // Get volunteer information
+            currentVolunteer = volunteer.name || volunteer.volunteerName || "Volunteer";
+            currentVolunteerEmail = volunteer.email || volunteer.volunteerEmail || "";
+            
+            console.log('Current Volunteer:', currentVolunteer);
+            console.log('Current Volunteer Email:', currentVolunteerEmail);
+            
+            // Update the dashboard with volunteer info
+            updateDashboardHero(currentVolunteer);
+            
+            // Update navbar
+            const volunteerNameElement = document.getElementById('volunteerName');
+            if (volunteerNameElement) {
+                volunteerNameElement.textContent = currentVolunteer;
+            }
+            
+            // Load events
+            loadAllEvents();
+            loadRecentActivity();
+            
+        } catch (error) {
+            console.error('Error parsing volunteer data:', error);
+            showError('Invalid volunteer data. Please login again.');
+        }
+    } else {
+        console.error('No volunteer data found in localStorage');
+        showError('No volunteer data found. Please login first.');
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+            window.location.href = 'volunteer-login.html';
+        }, 3000);
+    }
+}
+
+// Update the dashboard hero section
+function updateDashboardHero(volunteerName) {
+    const heroVolunteerName = document.getElementById('heroVolunteerName');
+    if (heroVolunteerName) {
+        heroVolunteerName.textContent = volunteerName;
+    }
+}
+
+// Load all available events
+// Load all available events - IMPROVED VERSION
+async function loadAllEvents() {
+    try {
+        console.log('🔄 Loading all events...');
+        
+        const response = await fetch(`${API_BASE}/events/volunteer`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Get response as text first
+        const responseText = await response.text();
+        console.log('📄 Raw events response:', responseText);
+        
+        let events;
+        try {
+            // Try to parse as JSON
+            events = JSON.parse(responseText);
+            console.log('✅ Successfully parsed events JSON');
+        } catch (jsonError) {
+            console.error('❌ Failed to parse events JSON:', jsonError);
+            console.error('Problematic response:', responseText);
+            throw new Error('Invalid JSON response from server');
+        }
+        
+        allEvents = events;
+        console.log('📋 Loaded events:', allEvents);
+        
+        displayAvailableEvents(allEvents);
+        loadRegisteredEvents();
+        updateVolunteerStats();
+        
+    } catch (error) {
+        console.error('❌ Error loading events:', error);
+        showEventsError(error.message);
+    }
+}
+// Display available events
+// Display available events - FIXED VERSION
+function displayAvailableEvents(events) {
+    const availableEventsContainer = document.getElementById('availableEvents');
+    
+    if (!events || events.length === 0) {
+        availableEventsContainer.innerHTML = `
+            <div class="no-events" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666;">
+                <h3>No Events Available</h3>
+                <p>Check back later for new volunteering opportunities.</p>
+            </div>
+        `;
+        return;
+    }
+
+    availableEventsContainer.innerHTML = events.map(event => {
+        const progressPercentage = event.maxVolunteers > 0 ? 
+            Math.round((event.currentVolunteers / event.maxVolunteers) * 100) : 0;
+        
+        const isFull = event.currentVolunteers >= event.maxVolunteers;
+        const isRegistered = event.registeredVolunteers && 
+                           event.registeredVolunteers.includes(currentVolunteerEmail);
+        
+        let cardClass = 'event-card';
+        if (isFull) cardClass += ' full';
+        else if (isRegistered) cardClass += ' registered';
+        else cardClass += ' available';
+
+        // DEBUG: Log each event's ID
+        console.log(`🎯 Event: ${event.title}, ID: ${event.id}, Type: ${typeof event.id}`);
+
+        return `
+            <div class="${cardClass}" data-event-id="${event.id}">
+                <div class="event-header">
+                    <div class="event-title">${event.title || 'Untitled Event'}</div>
+                    <div class="event-badge">${event.category || 'General'}</div>
+                </div>
+                
+                <div class="event-meta">
+                    <div class="meta-item">🏢 ${event.organization || 'Community Organization'}</div>
+                    <div class="meta-item">👤 Organized by ${event.organizer || 'Organizer'}</div>
+                    <div class="meta-item">📅 ${formatDate(event.eventDate)}</div>
+                    <div class="meta-item">⏰ ${formatTime(event.startTime)} - ${formatTime(event.endTime)}</div>
+                    <div class="meta-item">📍 ${event.location || 'TBD'}</div>
+                    ${event.skillsRequired ? `<div class="meta-item">🔧 ${event.skillsRequired}</div>` : ''}
+                </div>
+                
+                <div class="volunteer-info">
+                    <div class="progress-text">
+                        ${event.currentVolunteers || 0}/${event.maxVolunteers || 0} volunteers
+                        ${isFull ? ' - ⚠️ FULL' : ''}
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                    </div>
+                </div>
+                
+                <div class="event-actions">
+                    <button onclick="viewEventDetails(${event.id})" class="btn-view">View Details</button>
+                    ${isRegistered ? 
+                        `<button class="btn btn-unregister" onclick="unregisterFromEvent(${event.id})">
+                            Unregister
+                        </button>` :
+                        `<button class="btn btn-register ${isFull ? 'btn-disabled' : ''}" 
+                                onclick="registerForEvent(${event.id})" 
+                                ${isFull ? 'disabled' : ''}>
+                            ${isFull ? 'Event Full' : 'Register'}
+                        </button>`
+                    }
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+//EMAIL-BASED REGISTRATION FUNCTION
+// IMPROVED REGISTRATION FUNCTION WITH BETTER JSON HANDLING
+async function registerForEvent(eventId) {
+    try {
+        console.log('🔍 === REGISTRATION START ===');
+        
+        // Show loading
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        if (loadingSpinner) loadingSpinner.style.display = 'flex';
+        
+        // Get current volunteer data
+        const volunteerData = JSON.parse(localStorage.getItem('volunteer') || 'null');
+        
+        if (!volunteerData || !volunteerData.email) {
+            alert('Please log in as a volunteer to register for events.');
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            return;
+        }
+
+        const volunteerEmail = volunteerData.email || volunteerData.volunteerEmail;
+        const volunteerName = volunteerData.name || volunteerData.volunteerName || "Volunteer";
+
+        console.log('📧 Volunteer Email:', volunteerEmail);
+
+        // Validate inputs
+        if (!volunteerEmail) {
+            alert('Error: Volunteer email not found.');
+            return;
+        }
+
+        if (!eventId || isNaN(parseInt(eventId))) {
+            alert('Error: Invalid event ID.');
+            return;
+        }
+
+        const numericEventId = parseInt(eventId);
+
+        const requestBody = {
+            volunteerEmail: volunteerEmail,
+            eventId: numericEventId
+        };
+
+        console.log('📦 Request body:', requestBody);
+
+        // Call backend API
+        const response = await fetch('http://localhost:8092/api/volunteer-registrations/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        console.log('📡 Response status:', response.status);
+        
+        // Get response as text first
+        const responseText = await response.text();
+        console.log('📄 Raw response text:', responseText);
+        
+        let result;
+        try {
+            // Try to parse as JSON
+            result = JSON.parse(responseText);
+            console.log('✅ Successfully parsed JSON response:', result);
+        } catch (jsonError) {
+            console.warn('⚠️ Response is not valid JSON, using as plain text');
+            console.warn('JSON parse error:', jsonError);
+            result = { message: responseText };
+        }
+
+        if (response.ok) {
+            console.log('✅ Registration successful');
+            alert(`✅ Thank you ${volunteerName}! You have successfully registered for the event.`);
+            
+            // Refresh the events lists after a short delay
+            setTimeout(() => {
+                loadAllEvents();
+                loadRegisteredEvents();
+            }, 1000);
+            
+        } else {
+            console.log('❌ Registration failed');
+            alert('❌ ' + (result.message || result || 'Registration failed'));
+        }
+        
+    } catch (error) {
+        console.error('💥 Error registering for event:', error);
+        alert('❌ Error registering for event: ' + error.message);
+    } finally {
+        // Hide loading
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        if (loadingSpinner) loadingSpinner.style.display = 'none';
+        console.log('🔍 === REGISTRATION END ===');
+    }
+}
+// Load registered events for the current volunteer
+async function loadRegisteredEvents() {
+    try {
+        const volunteerData = JSON.parse(localStorage.getItem('volunteer') || 'null');
+        
+        if (!volunteerData || !volunteerData.email) {
+            console.log('No volunteer email found');
+            displayRegisteredEvents([]);
+            return;
+        }
+
+        const volunteerEmail = volunteerData.email || volunteerData.volunteerEmail;
+        
+        console.log('Loading registered events for email:', volunteerEmail);
+        
+        // Use email-based endpoint
+        const response = await fetch(`http://localhost:8092/api/volunteer-registrations/volunteer/email/${encodeURIComponent(volunteerEmail)}`);
+        
+        if (response.ok) {
+            const registeredEvents = await response.json();
+            console.log('Registered events loaded:', registeredEvents);
+            displayRegisteredEvents(registeredEvents);
+            loadEventsForSharing();
+        } 
+         else {
+            console.error('Failed to load registered events, status:', response.status);
+            // Fallback to ID-based if email fails
+            loadRegisteredEventsById();
+        }
+        
+    } catch (error) {
+        console.error('Error loading registered events by email:', error);
+        // Fallback to ID-based
+        loadRegisteredEventsById();
+    }
+}
+
+// Display registered events
+function displayRegisteredEvents(events) {
+    const registeredEventsContainer = document.getElementById('registeredEventsList');
+    
+    if (!events || events.length === 0) {
+        registeredEventsContainer.innerHTML = `
+            <div class="no-events" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666;">
+                <h3>No Registered Events</h3>
+                <p>Register for events to see them here.</p>
+            </div>
+        `;
+        return;
+    }
+
+    registeredEventsContainer.innerHTML = events.map(event => {
+        const progressPercentage = event.maxVolunteers > 0 ? 
+            Math.round((event.currentVolunteers / event.maxVolunteers) * 100) : 0;
+
+        return `
+            <div class="event-card registered" data-event-id="${event.id}">
+                <div class="event-header">
+                    <div class="event-title">${event.title || 'Untitled Event'}</div>
+                    <div class="event-badge">${event.category || 'General'}</div>
+                </div>
+                
+                <div class="event-meta">
+                    <div class="meta-item">🏢 ${event.organization || 'Community Organization'}</div>
+                    <div class="meta-item">📅 ${formatDate(event.eventDate)}</div>
+                    <div class="meta-item">⏰ ${formatTime(event.startTime)} - ${formatTime(event.endTime)}</div>
+                    <div class="meta-item">📍 ${event.location || 'TBD'}</div>
+                </div>
+                
+                <div class="volunteer-info">
+                    <div class="progress-text">
+                        ${event.currentVolunteers || 0}/${event.maxVolunteers || 0} volunteers
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                    </div>
+                </div>
+                
+                <div class="event-actions">
+                    <button class="btn btn-view" onclick="viewEventDetails(${event.id})">
+                        View Details
+                    </button>
+                    <button class="btn btn-unregister" onclick="unregisterFromEvent(${event.id})">
+                        Unregister
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Unregister from an event
+async function unregisterFromEvent(eventId) {
+    if (confirm('Are you sure you want to unregister from this event?')) {
+        try {
+            const volunteerData = JSON.parse(localStorage.getItem('volunteer') || 'null');
+            
+            if (!volunteerData || !volunteerData.email) {
+                alert('Please log in as a volunteer.');
+                return;
+            }
+
+            const volunteerEmail = volunteerData.email || volunteerData.volunteerEmail;
+            const numericEventId = parseInt(eventId);
+
+            console.log('Unregistering:', volunteerEmail, 'from event:', numericEventId);
+
+            const response = await fetch('http://localhost:8092/api/volunteer-registrations/unregister', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    volunteerEmail: volunteerEmail,
+                    eventId: numericEventId
+                })
+            });
+
+            const result = await response.text();
+            
+            if (response.ok) {
+                alert('✅ Successfully unregistered from the event!');
+                loadAllEvents();
+                loadRegisteredEvents();
+            } else {
+                alert('❌ ' + result);
+            }
+
+        } catch (error) {
+            console.error('Error unregistering from event:', error);
+            alert('❌ Error unregistering from event: ' + error.message);
+        }
+    }
+}
+
+// View event details
+async function viewEventDetails(eventId) {
+    try {
+        const response = await fetch(`${API_BASE}/events/${eventId}`);
+        
+        if (!response.ok) {
+            throw new Error('Event not found');
+        }
+        
+        const event = await response.json();
+        currentEventId = eventId;
+        
+        displayEventDetails(event);
+        
+    } catch (error) {
+        console.error('Error loading event details:', error);
+        alert('Error loading event details');
+    }
+}
+
+// Display event details in modal
+function displayEventDetails(event) {
+    const progressPercentage = event.maxVolunteers > 0 ? 
+        Math.round((event.currentVolunteers / event.maxVolunteers) * 100) : 0;
+    
+    const isFull = event.currentVolunteers >= event.maxVolunteers;
+    const isRegistered = event.registeredVolunteers && 
+                       event.registeredVolunteers.includes(currentVolunteerEmail);
+
+    document.getElementById('modalTitle').textContent = event.title || 'Event Details';
+    
+    document.getElementById('eventDetails').innerHTML = `
+        <div class="event-details">
+            <div class="detail-section">
+                <h4>Description</h4>
+                <p>${event.description || 'No description provided.'}</p>
+            </div>
+            
+            <div class="detail-section">
+                <h4>Event Information</h4>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <strong>Category:</strong> ${event.category || 'General'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Date:</strong> ${formatDate(event.eventDate)}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Time:</strong> ${formatTime(event.startTime)} - ${formatTime(event.endTime)}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Location:</strong> ${event.location || 'TBD'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Organization:</strong> ${event.organization || 'Community Organization'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Organizer:</strong> ${event.organizer || 'Organizer'}
+                    </div>
+                    ${event.skillsRequired ? `
+                    <div class="detail-item">
+                        <strong>Skills Required:</strong> ${event.skillsRequired}
+                    </div>` : ''}
+                </div>
+            </div>
+            
+            <div class="detail-section">
+                <h4>Volunteer Information</h4>
+                <div class="volunteer-info">
+                    <div class="progress-text">
+                        ${event.currentVolunteers || 0}/${event.maxVolunteers || 0} volunteers registered
+                        ${isFull ? ' - ⚠️ EVENT IS FULL' : ''}
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                    </div>
+                    ${isRegistered ? '<p style="color: #2196F3; margin-top: 10px;">✅ You are registered for this event</p>' : ''}
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Show/hide register/unregister buttons
+    const registerBtn = document.getElementById('registerBtn');
+    const unregisterBtn = document.getElementById('unregisterBtn');
+    
+    if (isRegistered) {
+        registerBtn.style.display = 'none';
+        unregisterBtn.style.display = 'block';
+    } else {
+        registerBtn.style.display = isFull ? 'none' : 'block';
+        unregisterBtn.style.display = 'none';
+    }
+
+    document.getElementById('eventModal').style.display = 'block';
+}
+
+// Update volunteer statistics
+function updateVolunteerStats() {
+    const registeredCount = document.querySelectorAll('.event-card.registered').length;
+    const upcomingCount = allEvents.filter(event => 
+        new Date(event.eventDate) >= new Date() &&
+        event.registeredVolunteers && 
+        event.registeredVolunteers.includes(currentVolunteerEmail)
+    ).length;
+    
+    const completedCount = allEvents.filter(event => 
+        new Date(event.eventDate) < new Date() &&
+        event.registeredVolunteers && 
+        event.registeredVolunteers.includes(currentVolunteerEmail)
+    ).length;
+
+    document.getElementById('registeredEvents').textContent = registeredCount;
+    document.getElementById('upcomingEvents').textContent = upcomingCount;
+    document.getElementById('completedEvents').textContent = completedCount;
+}
+
+// Filter events
+function filterEvents() {
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    const dateFilter = document.getElementById('dateFilter').value;
+    
+    let filteredEvents = [...allEvents];
+    
+    // Filter by category
+    if (categoryFilter) {
+        filteredEvents = filteredEvents.filter(event => 
+            event.category === categoryFilter
+        );
+    }
+    
+    // Filter by date
+    if (dateFilter) {
+        const today = new Date();
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        
+        filteredEvents = filteredEvents.filter(event => {
+            const eventDate = new Date(event.eventDate);
+            
+            switch (dateFilter) {
+                case 'today':
+                    return eventDate.toDateString() === today.toDateString();
+                case 'week':
+                    return eventDate >= startOfWeek && eventDate <= today;
+                case 'month':
+                    return eventDate >= startOfMonth && eventDate <= today;
+                default:
+                    return true;
+            }
+        });
+    }
+    
+    displayAvailableEvents(filteredEvents);
+}
+
+// Load recent activity
+function loadRecentActivity() {
+    const activityContainer = document.getElementById('recentActivity');
+    
+    // Placeholder activity - you can implement real activity tracking
+    activityContainer.innerHTML = `
+        <div class="activity-item">
+            <div class="activity-title">Welcome to SocioServe!</div>
+            <div class="activity-meta">Just now</div>
+        </div>
+        <div class="activity-item">
+            <div class="activity-title">Browse available events</div>
+            <div class="activity-meta">Find volunteering opportunities that match your interests</div>
+        </div>
+    `;
+}
+
+// Utility functions
+function formatDate(dateString) {
+    if (!dateString) return 'TBD';
+    try {
+        return new Date(dateString).toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric',
+            month: 'long', 
+            day: 'numeric' 
+        });
+    } catch (error) {
+        return 'Invalid Date';
+    }
+}
+
+function formatTime(timeString) {
+    if (!timeString) return 'TBD';
+    try {
+        return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        });
+    } catch (error) {
+        return 'Invalid Time';
+    }
+}
+
+// Modal functions
+function closeModal() {
+    document.getElementById('eventModal').style.display = 'none';
+    currentEventId = null;
+}
+
+// Placeholder functions for future features
+function viewMyEvents() {
+    document.querySelector('.section:nth-child(3)').scrollIntoView({ 
+        behavior: 'smooth' 
+    });
+}
+
+function updateProfile() {
+    alert('Profile update feature coming soon!');
+}
+
+// Error handling
+function showError(message) {
+    const mainSection = document.querySelector('.main-section');
+    if (mainSection) {
+        mainSection.innerHTML = `
+            <div class="error-message" style="background: #f8d7da; color: #721c24; padding: 20px; border-radius: 8px; text-align: center;">
+                <h3>⚠️ Error</h3>
+                <p>${message}</p>
+                <button onclick="window.location.href='volunteer-login.html'" 
+                        style="background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+                    Login Again
+                </button>
+            </div>
+        `;
+    }
+}
+
+function showEventsError(errorMessage) {
+    const availableEvents = document.getElementById('availableEvents');
+    if (availableEvents) {
+        availableEvents.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #666; grid-column: 1 / -1;">
+                <p>Unable to load events. ${errorMessage}</p>
+                <button class="btn-refresh" onclick="loadAllEvents()" style="margin-top: 15px;">Retry</button>
+            </div>
+        `;
+    }
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('eventModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+// Global register/unregister functions for modal
+function registerFromModal() {
+    if (currentEventId) {
+        closeModal();
+        registerForEvent(currentEventId);
+    }
+}
+
+function unregisterFromModal() {
+    if (currentEventId) {
+        closeModal();
+        unregisterFromEvent(currentEventId);
+    }
+}
+
+// Debug function to test registration
+async function testRegistration() {
+    console.log('Testing registration system...');
+    console.log('Volunteer data:', JSON.parse(localStorage.getItem('volunteer') || 'null'));
+    console.log('Available events:', allEvents);
+    
+    // Test if backend is reachable
+    try {
+        const response = await fetch('http://localhost:8092/api/events/volunteer');
+        console.log('Backend connection test:', response.status);
+    } catch (error) {
+        console.error('Backend connection failed:', error);
+    }
+}
+
+// Call test on load for debugging
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(testRegistration, 1000);
+});
+
+
+//technology
+// COMPLETELY FIXED Social Sharing Utility
+class SocialSharing {
+    constructor() {
+        this.platforms = {
+            facebook: {
+                name: 'Facebook',
+                icon: '📘',
+                color: '#1877F2',
+                shareUrl: (message, url) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(message)}`
+            },
+            twitter: {
+                name: 'Twitter', 
+                icon: '🐦',
+                color: '#1DA1F2',
+                shareUrl: (message, url) => `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(url)}`
+            },
+            linkedin: {
+                name: 'LinkedIn',
+                icon: '💼', 
+                color: '#0077B5',
+                shareUrl: (message, url) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
+            },
+            whatsapp: {
+                name: 'WhatsApp',
+                icon: '💚',
+                color: '#25D366',
+                shareUrl: (message, url) => `https://api.whatsapp.com/send?text=${encodeURIComponent(message + ' ' + url)}`
+            }
+        };
+    }
+
+    // Share any event immediately
+    shareEvent(event, platform) {
+        console.log('Sharing event:', event, 'on platform:', platform);
+        
+        if (!event) {
+            this.showNotification('❌ No event data to share', 'error');
+            return;
+        }
+
+        const message = this.generateEventShareMessage(event);
+        const url = window.location.href; // Current page URL
+        
+        this.shareOnPlatform(message, url, platform);
+    }
+
+    // Generate share message for events
+    generateEventShareMessage(event) {
+        const encouragements = [
+            "Check out this amazing volunteer opportunity in our community!",
+            "I found this great volunteer event that could use more support!",
+            "This looks like a wonderful chance to make a difference in our community!",
+            "Let's help this event reach more volunteers - sharing this opportunity!",
+            "What a great way to give back to our community! Join this volunteer event."
+        ];
+        
+        const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+        const eventDate = this.formatEventDate(event.eventDate);
+        
+        return `🌟 ${randomEncouragement}\n\n${event.title}\n📅 ${eventDate}\n📍 ${event.location || 'Various Locations'}\n\nJoin the movement on Socioserve! 🎯`;
+    }
+
+    // Format date for sharing
+    formatEventDate(dateString) {
+        if (!dateString) return 'Date TBD';
+        try {
+            return new Date(dateString).toLocaleDateString('en-US', { 
+                weekday: 'short', 
+                year: 'numeric',
+                month: 'short', 
+                day: 'numeric' 
+            });
+        } catch (error) {
+            return 'Date TBD';
+        }
+    }
+
+    // Share on specific platform
+    shareOnPlatform(message, url, platform) {
+        console.log(`Sharing to ${platform}:`, message);
+        
+        const platformConfig = this.platforms[platform];
+        if (!platformConfig) {
+            this.showNotification(`❌ Platform ${platform} not supported`, 'error');
+            return;
+        }
+
+        try {
+            const shareUrl = platformConfig.shareUrl(message, url);
+            console.log('Share URL:', shareUrl);
+            
+            if (platform === 'whatsapp' || platform === 'email') {
+                window.open(shareUrl, '_blank');
+            } else {
+                window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes');
+            }
+            
+            this.showNotification(`✅ Shared on ${platformConfig.name}!`, 'success');
+        } catch (error) {
+            console.error('Sharing error:', error);
+            this.showNotification(`❌ Failed to share on ${platformConfig.name}`, 'error');
+        }
+    }
+
+    // Create share buttons for events
+    createEventShareButtons(events, container) {
+        if (!container) {
+            console.error('Share container not found');
+            return;
+        }
+
+        // If no events, create sample buttons
+        if (!events || events.length === 0) {
+            this.createSampleShareButtons(container);
+            return;
+        }
+
+        // Use first event for sharing
+        const event = events[0];
+        
+        container.innerHTML = `
+            <div class="share-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="margin-bottom: 15px; color: white;">🎯 Share Volunteer Events</h3>
+                <p style="margin-bottom: 20px; opacity: 0.9;">Spread the word and inspire others to join!</p>
+                
+                <div class="event-preview" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 10px 0; color: white;">${event.title}</h4>
+                    <p style="margin: 5px 0; opacity: 0.9;">📅 ${this.formatEventDate(event.eventDate)}</p>
+                    <p style="margin: 5px 0; opacity: 0.9;">📍 ${event.location || 'Location TBD'}</p>
+                </div>
+                
+                <div class="share-buttons-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                    ${Object.entries(this.platforms).map(([key, platform]) => `
+                        <button class="share-btn" 
+                                onclick="socialSharing.shareEvent(${this.escapeEventForJS(event)}, '${key}')"
+                                style="background: ${platform.color}; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; transition: all 0.3s ease;">
+                            ${platform.icon} Share on ${platform.name}
+                        </button>
+                    `).join('')}
+                </div>
+                
+                <button class="copy-btn" 
+                        onclick="socialSharing.copyEventToClipboard(${this.escapeEventForJS(event)})"
+                        style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 0.95rem; width: 100%; transition: all 0.3s ease;">
+                    📋 Copy Event Details to Share
+                </button>
+            </div>
+        `;
+    }
+
+    // Create sample share buttons when no events
+    createSampleShareButtons(container) {
+        const sampleEvent = {
+            title: "Community Volunteer Event",
+            eventDate: new Date().toISOString(),
+            location: "Local Community Center",
+            organization: "Community Outreach"
+        };
+
+        container.innerHTML = `
+            <div class="share-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="margin-bottom: 15px; color: white;">🎯 Share Volunteer Opportunities</h3>
+                <p style="margin-bottom: 20px; opacity: 0.9;">Spread the word about volunteering in our community!</p>
+                
+                <div class="share-buttons-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                    <button class="share-btn" onclick="socialSharing.shareEvent(${this.escapeEventForJS(sampleEvent)}, 'facebook')" 
+                            style="background: #1877F2; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; transition: all 0.3s ease;">
+                        📘 Share on Facebook
+                    </button>
+                    <button class="share-btn" onclick="socialSharing.shareEvent(${this.escapeEventForJS(sampleEvent)}, 'twitter')" 
+                            style="background: #1DA1F2; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; transition: all 0.3s ease;">
+                        🐦 Share on Twitter
+                    </button>
+                    <button class="share-btn" onclick="socialSharing.shareEvent(${this.escapeEventForJS(sampleEvent)}, 'linkedin')" 
+                            style="background: #0077B5; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; transition: all 0.3s ease;">
+                        💼 Share on LinkedIn
+                    </button>
+                    <button class="share-btn" onclick="socialSharing.shareEvent(${this.escapeEventForJS(sampleEvent)}, 'whatsapp')" 
+                            style="background: #25D366; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; transition: all 0.3s ease;">
+                        💚 Share on WhatsApp
+                    </button>
+                </div>
+                
+                <button class="copy-btn" onclick="socialSharing.copyEventToClipboard(${this.escapeEventForJS(sampleEvent)})"
+                        style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 0.95rem; width: 100%; transition: all 0.3s ease;">
+                    📋 Copy Event Details to Share
+                </button>
+            </div>
+        `;
+    }
+
+    // Escape event for JavaScript
+    escapeEventForJS(event) {
+        return JSON.stringify(event).replace(/"/g, '&quot;');
+    }
+
+    // Copy event to clipboard
+    async copyEventToClipboard(event) {
+        const message = this.generateEventShareMessage(event);
+        try {
+            await navigator.clipboard.writeText(message);
+            this.showNotification('✅ Event details copied to clipboard!', 'success');
+        } catch (err) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = message;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                this.showNotification('✅ Event details copied to clipboard!', 'success');
+            } catch (fallbackErr) {
+                this.showNotification('❌ Failed to copy to clipboard', 'error');
+            }
+            document.body.removeChild(textArea);
+        }
+    }
+
+    // Show notification
+    showNotification(message, type = 'info') {
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.share-notification');
+        existingNotifications.forEach(notification => notification.remove());
+
+        const notification = document.createElement('div');
+        notification.className = `share-notification ${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            font-weight: bold;
+            font-size: 14px;
+        `;
+
+        if (type === 'success') {
+            notification.style.background = '#28a745';
+        } else if (type === 'error') {
+            notification.style.background = '#dc3545';
+        } else {
+            notification.style.background = '#17a2b8';
+        }
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 3000);
+    }
+}
+
+// Initialize social sharing globally
+const socialSharing = new SocialSharing();
+
+// Volunteer Stories Frontend Management
+class VolunteerStories {
+    constructor() {
+        this.currentVolunteer = null;
+        this.stories = [];
+    }
+
+    // Initialize stories system
+    init(volunteerId) {
+        this.currentVolunteer = volunteerId;
+        this.loadStories();
+        this.setupEventListeners();
+    }
+
+    // Load all stories
+    async loadStories() {
+        try {
+            const response = await fetch('/api/stories');
+            this.stories = await response.json();
+            this.displayStories(this.stories);
+        } catch (error) {
+            console.error('Error loading stories:', error);
+        }
+    }
+
+    // Display stories in container
+    displayStories(stories, containerId = 'stories-container') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.innerHTML = stories.map(story => this.createStoryCard(story)).join('');
+    }
+
+    // Create story card HTML
+    // Create story card HTML with encouragement focus
+createStoryCard(story) {
+    const isOwner = story.volunteer.id === this.currentVolunteer;
+    const shortContent = story.content.length > 150 ? 
+        story.content.substring(0, 150) + '...' : story.content;
+
+    // Determine badge text based on category
+    let badgeText = "Volunteer Story";
+    let badgeColor = "#667eea";
+    
+    if (story.category === "EXCITEMENT") {
+        badgeText = "🌟 Event Excitement";
+        badgeColor = "#ff6b6b";
+    } else if (story.category === "ENCOURAGEMENT") {
+        badgeText = "💪 Encouraging Others";
+        badgeColor = "#4ecdc4";
+    } else if (story.category === "EXPERIENCE") {
+        badgeText = "📚 Past Experience";
+        badgeColor = "#45b7d1";
+    }
+
+    return `
+        <div class="story-card" data-story-id="${story.id}">
+            <div class="story-header">
+                <div class="volunteer-info">
+                    <img src="${story.volunteer.profilePicture || '/assets/default-avatar.png'}" 
+                         alt="${story.volunteer.name}" class="volunteer-avatar">
+                    <div class="volunteer-details">
+                        <strong>${story.volunteer.name}</strong>
+                        <span class="story-date">${new Date(story.createdAt).toLocaleDateString()}</span>
+                        <small style="color: #666;">Registered for this event</small>
+                    </div>
+                </div>
+                <div class="story-badge" style="background: ${badgeColor}">
+                    ${badgeText}
+                </div>
+            </div>
+
+            ${story.imageUrl ? `
+            <div class="story-image">
+                <img src="${story.imageUrl}" alt="${story.title}">
+            </div>
+            ` : ''}
+
+            <div class="story-content">
+                <h3 class="story-title">${story.title}</h3>
+                <p class="story-text">${shortContent}</p>
+                ${story.content.length > 150 ? `
+                <button class="btn-read-more" onclick="volunteerStories.showFullStory(${story.id})">
+                    Read more
+                </button>
+                ` : ''}
+            </div>
+
+            <!-- Event call-to-action -->
+            <div class="event-cta" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📅 Interested in this event?</h4>
+                <p style="margin: 0 0 10px 0; color: #666;">
+                    "${story.event.title}" - ${formatDate(story.event.eventDate)}
+                </p>
+                <button class="btn-view" onclick="viewEventDetails(${story.event.id})" 
+                        style="background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
+                    View Event Details
+                </button>
+            </div>
+
+            <div class="story-footer">
+                <div class="story-likes">
+                    <button class="like-btn ${this.hasLiked(story.id) ? 'liked' : ''}" 
+                            onclick="volunteerStories.toggleLike(${story.id})">
+                        ❤️ ${story.likes}
+                    </button>
+                </div>
+                <div class="story-share">
+                    ${socialSharing.createShareLink('story', story).outerHTML}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+    // Toggle like on story
+    async toggleLike(storyId) {
+        try {
+            const response = await fetch(`/api/stories/${storyId}/like?volunteerId=${this.currentVolunteer}`, {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                this.updateLikeUI(storyId, result.liked);
+                this.loadStories(); // Refresh to get updated like count
+            }
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        }
+    }
+
+    // Check if current user liked the story
+    async hasLiked(storyId) {
+        try {
+            const response = await fetch(`/api/stories/${storyId}/has-liked?volunteerId=${this.currentVolunteer}`);
+            return await response.json();
+        } catch (error) {
+            return false;
+        }
+    }
+
+    // Update like button UI
+    updateLikeUI(storyId, liked) {
+        const likeBtn = document.querySelector(`[data-story-id="${storyId}"] .like-btn`);
+        if (likeBtn) {
+            likeBtn.classList.toggle('liked', liked);
+        }
+    }
+
+    // Show create story modal
+   // Show create story modal
+showCreateStoryModal(eventId = null) {
+    const modal = document.createElement('div');
+    modal.className = 'modal story-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2>Share Your Volunteer Experience</h2>
+            <p style="color: #666; margin-bottom: 20px; font-style: italic;">
+                💡 Share what makes this event special and encourage others to join!
+            </p>
+            <form id="create-story-form">
+                <div class="form-group">
+                    <label>Story Title</label>
+                    <input type="text" id="story-title" required 
+                           placeholder="e.g., Why I'm excited about [Event Name]">
+                </div>
+                <div class="form-group">
+                    <label>Event You're Registered For</label>
+                    <select id="story-event" required>
+                        <option value="">Select an event you're registered for</option>
+                    </select>
+                    <small style="color: #666;">You can only share stories about events you're registered for</small>
+                </div>
+                <div class="form-group">
+                    <label>Your Story & Encouragement</label>
+                    <textarea id="story-content" rows="6" required 
+                              placeholder="Share why you registered, what you're looking forward to, and why others should join too..."></textarea>
+                    <small style="color: #666;">Example: &quot;I registered because... What excites me most is... You should join because...&quot;</small>
+                </div>
+                <div class="form-group">
+                    <label>Image URL (optional)</label>
+                    <input type="url" id="story-image" placeholder="https://example.com/event-image.jpg">
+                    <small style="color: #666;">Add an event photo or related image</small>
+                </div>
+                <div class="form-group">
+                    <label>Story Type</label>
+                    <select id="story-category">
+                        <option value="EXCITEMENT">Event Excitement</option>
+                        <option value="ENCOURAGEMENT">Encourage Others</option>
+                        <option value="EXPERIENCE">Past Experience</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="this.closest('.modal').remove()">Cancel</button>
+                    <button type="submit" class="btn-submit">Share to Encourage Others</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    this.setupStoryForm(modal, eventId);
+}
+    // Setup story form submission
+    setupStoryForm(modal, eventId) {
+        const form = modal.querySelector('#create-story-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const storyData = {
+                title: document.getElementById('story-title').value,
+                content: document.getElementById('story-content').value,
+                imageUrl: document.getElementById('story-image').value,
+                volunteerId: this.currentVolunteer,
+                eventId: eventId || document.getElementById('story-event').value,
+                category: document.getElementById('story-category').value,
+                published: true
+            };
+
+            await this.createStory(storyData);
+            modal.remove();
+        });
+
+        // Populate events dropdown
+        this.populateEventsDropdown();
+    }
+
+    // Create new story
+    async createStory(storyData) {
+        try {
+            const response = await fetch('/api/stories', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(storyData)
+            });
+
+            if (response.ok) {
+                socialSharing.showNotification('Story published successfully!', 'success');
+                this.loadStories(); // Refresh stories list
+                
+                // Auto-share on social media
+                const newStory = await response.json();
+                socialSharing.shareStory(newStory, 'facebook');
+            }
+        } catch (error) {
+            console.error('Error creating story:', error);
+            socialSharing.showNotification('Error publishing story', 'error');
+        }
+    }
+
+    // Populate events dropdown
+ // Populate events dropdown with only registered events
+async populateEventsDropdown() {
+    try {
+        const response = await fetch(`/api/stories/volunteer/${this.currentVolunteer}/registered-events`);
+        const events = await response.json();
+        
+        const select = document.getElementById('story-event');
+        if (events.length === 0) {
+            select.innerHTML = '<option value="">No registered events found</option>';
+            select.disabled = true;
+        } else {
+            select.innerHTML = '<option value="">Select an event you\'re registered for</option>' +
+                events.map(event => `<option value="${event.id}">${event.title} (${formatDate(event.eventDate)})</option>`).join('');
+            select.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error loading registered events:', error);
+        const select = document.getElementById('story-event');
+        select.innerHTML = '<option value="">Error loading events</option>';
+        select.disabled = true;
+    }
+}
+
+    // Setup event listeners
+    setupEventListeners() {
+        // Create story button
+        const createStoryBtn = document.getElementById('create-story-btn');
+        if (createStoryBtn) {
+            createStoryBtn.addEventListener('click', () => this.showCreateStoryModal());
+        }
+
+        // Search stories
+        const searchInput = document.getElementById('story-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => this.searchStories(e.target.value));
+        }
+    }
+
+    // Search stories
+    async searchStories(query) {
+        if (query.length < 2) {
+            this.displayStories(this.stories);
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/stories/search?q=${encodeURIComponent(query)}`);
+            const results = await response.json();
+            this.displayStories(results);
+        } catch (error) {
+            console.error('Error searching stories:', error);
+        }
+    }
+}
+
+// Initialize stories system
+const volunteerStories = new VolunteerStories();
+
+// When volunteer logs in
+const volunteer = JSON.parse(localStorage.getItem('volunteer'));
+if (volunteer) {
+    // Initialize stories system
+    volunteerStories.init(volunteer.id);
+    
+    // Example: Create share buttons for an achievement
+    const achievement = {
+        name: "Community Champion",
+        desc: "Completed 5 volunteer events"
+    };
+    
+    socialSharing.createShareButtons('achievement', achievement, 
+        document.getElementById('share-buttons-container'));
+}
+
+
+// Load registered events for sharing
+// UPDATED: Load registered events for sharing with fallback
+// UPDATED: Load events for sharing (all events, not just registered)
+async function loadEventsForSharing() {
+    try {
+        const shareContainer = document.getElementById('share-events-container');
+        
+        if (!shareContainer) {
+            console.error('Share container not found');
+            return;
+        }
+
+        console.log('Loading events for sharing...');
+        
+        // Load ALL events for sharing
+        const response = await fetch('http://localhost:8092/api/events/volunteer');
+        
+        if (response.ok) {
+            const allEvents = await response.json();
+            console.log('Events for sharing:', allEvents);
+            
+            if (allEvents && allEvents.length > 0) {
+                // Create share buttons for all events
+                socialSharing.createEventShareButtons(allEvents, shareContainer);
+            } else {
+                shareContainer.innerHTML = this.getNoEventsHTML();
+            }
+        } else {
+            shareContainer.innerHTML = this.getNoEventsHTML();
+        }
+    } catch (error) {
+        console.error('Error loading events for sharing:', error);
+        const shareContainer = document.getElementById('share-events-container');
+        if (shareContainer) {
+            shareContainer.innerHTML = this.getNoEventsHTML();
+        }
+    }
+}
+
+
+// Show available events that user can register for
+async function showAvailableEventsForSharing(container) {
+    try {
+        const response = await fetch('http://localhost:8092/api/events/volunteer');
+        if (response.ok) {
+            const allEvents = await response.json();
+            if (allEvents && allEvents.length > 0) {
+                // Show first 3 available events with registration prompt
+                container.innerHTML = `
+                    <div class="share-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; margin: 20px 0;">
+                        <h3 style="margin-bottom: 15px; color: white;">🎯 Get Started with Sharing</h3>
+                        <p style="margin-bottom: 20px; opacity: 0.9;">Register for an event first to share it with your network!</p>
+                        
+                        <div class="available-events" style="display: grid; gap: 15px; margin-bottom: 20px;">
+                            ${allEvents.slice(0, 3).map(event => `
+                                <div class="event-preview" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                                    <h4 style="margin: 0 0 10px 0; color: white;">${event.title}</h4>
+                                    <p style="margin: 5px 0; opacity: 0.9;">📅 ${new Date(event.eventDate).toLocaleDateString()}</p>
+                                    <p style="margin: 5px 0; opacity: 0.9;">📍 ${event.location || 'Location TBD'}</p>
+                                    <button class="btn-register" onclick="registerForEvent(${event.id})" 
+                                            style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-top: 10px;">
+                                        Register & Share
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = this.getNoEventsHTML();
+            }
+        } else {
+            container.innerHTML = this.getNoEventsHTML();
+        }
+    } catch (error) {
+        container.innerHTML = this.getNoEventsHTML();
+    }
+}
+
+// HTML for when no events are available
+function getNoEventsHTML() {
+    return `
+        <div class="share-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; margin: 20px 0; text-align: center;">
+            <h3 style="margin-bottom: 15px; color: white;">🎯 Share Volunteer Events</h3>
+            <p style="margin-bottom: 20px; opacity: 0.9;">Register for events to share them with your network and encourage others to join!</p>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: white; margin-bottom: 15px;">Share Any Event to Get Started:</h4>
+                <div class="share-buttons-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                    <button class="share-btn" onclick="shareSampleEvent('facebook')" style="background: #1877F2; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 1rem;">
+                        📘 Share on Facebook
+                    </button>
+                    <button class="share-btn" onclick="shareSampleEvent('twitter')" style="background: #1DA1F2; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 1rem;">
+                        🐦 Share on Twitter
+                    </button>
+                    <button class="share-btn" onclick="shareSampleEvent('linkedin')" style="background: #0077B5; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 1rem;">
+                        💼 Share on LinkedIn
+                    </button>
+                    <button class="share-btn" onclick="shareSampleEvent('whatsapp')" style="background: #25D366; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 1rem;">
+                        💚 Share on WhatsApp
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn-view" onclick="loadAllEvents()" 
+                    style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem;">
+                Browse All Events
+            </button>
+        </div>
+    `;
+}
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizer Login - SocioServe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #222;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0a1a2f;
+    }
+
+    .navbar nav a {
+      text-decoration: none;
+      color: #444;
+      font-size: 15px;
+      transition: 0.3s;
+      margin-left: 20px;
+    }
+
+    .navbar nav a:hover {
+      color: #0a1a2f;
+    }
+
+    .form-container {
+      flex: 1;
+      max-width: 450px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0a1a2f;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .login-form label {
+      display: block;
+      margin: 20px 0 8px 0;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+
+    .login-form input:focus {
+      border-color: #0a1a2f;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.1);
+      outline: none;
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      border: none;
+      margin-top: 20px;
+    }
+
+    .primary {
+      background: #0a1a2f;
+      color: #fff;
+    }
+
+    .primary:hover {
+      background: #142b4f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(10, 26, 47, 0.3);
+    }
+
+    .alert {
+      padding: 16px 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      font-weight: 500;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .form-footer a {
+      color: #0a1a2f;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .form-footer a:hover {
+      color: #142b4f;
+      text-decoration: underline;
+    }
+
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: 10px;
+    }
+
+    .forgot-password a {
+      color: #0a1a2f;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+
+      .form-container {
+        margin: 20px;
+        padding: 30px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">SocioServe</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="organiser-register.html">Register</a>
+    </nav>
+  </header>
+
+  <section class="form-container">
+    <h2>Organizer Login</h2>
+    
+    <div id="message" class="alert" style="display: none;"></div>
+    
+    <form id="organizerLoginForm" class="login-form">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required placeholder="Enter your organization email">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Enter your password">
+
+      <div class="forgot-password">
+        <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn primary">
+        Sign In to Dashboard
+      </button>
+    </form>
+    
+    <div class="form-footer">
+      <p>Don't have an account? <a href="organiser-register.html">Register your organization</a></p>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 2rem 1rem; background: #f8f9fa; color: #333; margin-top: auto;">
+    <p>&copy; 2025 SocioServe. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Form submission handler
+    document.getElementById('organizerLoginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const messageDiv = document.getElementById('message');
+      
+      // Clear previous messages
+      messageDiv.style.display = 'none';
+      messageDiv.className = 'alert';
+      
+      // Basic validation
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        messageDiv.textContent = '❌ Please fill in all fields';
+        messageDiv.className = 'alert error';
+        messageDiv.style.display = 'block';
+        return;
+      }
+      
+      // Show loading state
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Signing In...';
+      submitBtn.classList.add('loading');
+      
+      try {
+        const response = await fetch('http://localhost8092/api/organizers/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        console.log('Login response status:', response.status);
+
+        if (response.ok) {
+          const result = await response.json();
+          
+          if (result.id) {
+            // SUCCESS - Store organizer data and redirect to dashboard
+            localStorage.setItem('organizer', JSON.stringify(result));
+            
+            messageDiv.textContent = '✅ Login successful! Redirecting to dashboard...';
+            messageDiv.className = 'alert success';
+            messageDiv.style.display = 'block';
+            
+            // Redirect to dashboard after 1 second
+            setTimeout(() => {
+              window.location.href = 'organiser-dashboard.html';
+            }, 1000);
+            
+          } else {
+            throw new Error('Invalid response from server');
+          }
+        } else {
+          const errorText = await response.text();
+          throw new Error(errorText || `Login failed with status: ${response.status}`);
+        }
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        
+        // Show appropriate error message
+        let errorMessage = 'Login failed: ' + error.message;
+        if (error.message.includes('401') || error.message.includes('Invalid email or password')) {
+          errorMessage = '❌ Invalid email or password. Please try again.';
+        } else if (error.message.includes('Network') || error.message.includes('Failed to fetch')) {
+          errorMessage = '❌ Network error. Please check your connection and try again.';
+        } else if (error.message.includes('404')) {
+          errorMessage = '❌ Account not found. Please check your email or register your organization first.';
+        }
+        
+        messageDiv.textContent = errorMessage;
+        messageDiv.className = 'alert error';
+        messageDiv.style.display = 'block';
+        
+      } finally {
+        // Reset button
+        submitBtn.textContent = originalText;
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    // Forgot password function
+    function forgotPassword() {
+      const email = document.getElementById('email').value.trim();
+      if (email) {
+        alert('Password reset link will be sent to: ' + email + '\n\n(Feature coming soon)');
+      } else {
+        alert('Please enter your email address first');
+        document.getElementById('email').focus();
+      }
+    }
+
+    // Check if user is already logged in
+    window.addEventListener('load', function() {
+      const organizer = localStorage.getItem('organizer');
+      if (organizer) {
+        console.log('Organizer already logged in, redirecting to dashboard...');
+        window.location.href = 'organiser-dashboard.html';
+      }
+      
+      // Test backend connection
+      testBackendConnection();
+    });
+
+    // Test backend connection
+    async function testBackendConnection() {
+      try {
+        const response = await fetch('http://localhost:8092/api/organizers/test');
+        console.log('Backend connection test:', response.status);
+      } catch (error) {
+        console.error('Backend connection failed:', error);
+        document.getElementById('message').textContent = '⚠️ Backend connection failed. Make sure the server is running on port 8092.';
+        document.getElementById('message').className = 'alert error';
+        document.getElementById('message').style.display = 'block';
+      }
+    }
+
+    // Enter key to submit form
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('organizerLoginForm').dispatchEvent(new Event('submit'));
+      }
+    });
+
+    // Auto-focus email field
+    document.getElementById('email').focus();
+  </script>
+</body>
+</html>
